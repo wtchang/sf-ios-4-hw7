@@ -27,8 +27,8 @@ Assignment (code, resources, project file) posted on Github
 Due Date: Monday, March 7, 2016 (by midnight).
 
 ## Suggested Ways to Get Started
-* Understand the roles of Cocoapods (for dependency management) and SwiftyJSON (for parsing JSON in Swift).
-* Load the JSON in a web browser to see it raw, then load it using the JSON Formatter website so that you can surf it more easily.
+* Understand the roles of [Cocoapods](https://cocoapods.org) (for dependency management) and [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) (for parsing JSON in Swift).
+* Load the JSON in a web browser to see it raw, then load it using the [JSON Formatter & Validator](https://jsonformatter.curiousconcept.com) so that you can surf it more easily.
 * Review the process for adding annotations to a map.
 
 ## Evaluation
