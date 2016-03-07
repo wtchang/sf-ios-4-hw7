@@ -9,16 +9,15 @@
 import UIKit
 import MapKit
 import CoreLocation
+import SwiftyJSON
 
-// @TODO 1-5 Add SwiftyJSON to project
-// @TODO 6 Edit info.plist
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var map: MKMapView!
     
     var pins:[Pin] = []
-    // @TODO 7 Add endpoint
+    let endpoint = "http://kathrynrotondo.com/ios4/pins.json"
     
     let latitude:CLLocationDegrees = 37.77
     let longitude:CLLocationDegrees = -122.45
@@ -29,18 +28,48 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // centers map on San Francisco
         centerMapOnLocation(latitude, longitude: longitude)
         
-        // @TODO 9: call loadData
+        loadData(endpoint)
         
         // adds a sample pin
         let pin = Pin(title: "GA", latitude: 37.7908727, longitude: -122.4034906)
         pins.append(pin)
         
-        // @TODO 11: iterates through the pin array to add pins to map
+        loadPins()
+    }
+    
+    func loadData(urlString:String){
+        if let url = NSURL(string: urlString) {
+            let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+            dispatch_async(dispatch_get_global_queue(priority, 0)) {
+                // do some task
+                if let data = try? NSData(contentsOfURL: url, options: []){
+                    print("We got data")
+                    let json = JSON(data: data)
+                    self.parseData(json)
+                }
+            }
+        }
+    }
+    
+    func parseData(json:JSON){
+        for result in json["Pins"].arrayValue{
+            let name = result["name"].stringValue
+            let coordinates = result["coordinates"]
+            let latitude = coordinates["latitude"].doubleValue
+            let longitude = coordinates["longitude"].doubleValue
+            let pin = Pin(title: name, latitude: latitude, longitude: longitude)
+           pins.append(pin)
+        }
+        loadPins()
+    }
+    
+    func loadPins(){
         for pin in pins {
             addAnnotation(pin)
         }
     }
-    
+
+
     func centerMapOnLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         
         // gets the center point
@@ -53,11 +82,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         let region = MKCoordinateRegionMakeWithDistance(coordinate, radius, radius)
         map.setRegion(region, animated: true)
     }
-    
-    // @TODO 7 Create a loadData function
-    // @TODO 10 inside loadData, call parseData
-    
-    // @TODO 8 Create a parseData function
+
     
     func addAnnotation(pin:Pin) {
         
